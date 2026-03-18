@@ -1,6 +1,6 @@
-const { genToken } = require("../config/token")
-const {User} = require('../model/user.model')
-const bcrypt = require('bcryptjs')
+import { genToken } from "../config/token.js";
+import { User } from '../model/user.model.js';
+import bcrypt from 'bcryptjs';
 
 const signUp = async (req,res)=>{
     try{
@@ -68,4 +68,4 @@ const logOut = async (req,res)=>{
 }
 // module.exports = {login}
 
-module.exports = { signUp, login, logOut};
+export { signUp, login, logOut };

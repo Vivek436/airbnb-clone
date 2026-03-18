@@ -1,37 +1,24 @@
-import React, { createContext } from 'react'
-export const authDataContext = createContext()
-const AuthContext = ({children}) => {
-    let serverUrl = "http://localhost:8000"
+import React, { createContext, useState } from 'react'
 
-    let value={
-        serverUrl
+export const authDataContext = createContext()
+
+const AuthContext = ({children}) => {
+    const serverUrl = import.meta.env.VITE_SERVER_URL || "http://localhost:8000"
+    const [loading, setLoading] = useState(false)
+
+    let value = {
+        serverUrl,
+        loading,
+        setLoading
     }
-  return (
-    <div>
-      <authDataContext.Provider value={value}>
-        {children}
-      </authDataContext.Provider>
-    </div>
-  )
+    
+    return (
+        <div>
+            <authDataContext.Provider value={value}>
+                {children}
+            </authDataContext.Provider>
+        </div>
+    )
 }
 
 export default AuthContext
-// import React, { createContext } from 'react'
-
-// export const AuthDataContext = createContext();
-
-// const AuthContext = ({ children }) => {
-//   let serverUrl = "http://localhost:8000";
-
-//   let value = {
-//     serverUrl
-//   };
-
-//   return (
-//     <AuthDataContext.Provider value={value}>
-//       {children}
-//     </AuthDataContext.Provider>
-//   );
-// };
-
-// export default AuthContext;

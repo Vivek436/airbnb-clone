@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+import mongoose from 'mongoose';
 
 const userSchema = new mongoose.Schema({
     name:{
@@ -19,7 +19,7 @@ const userSchema = new mongoose.Schema({
     },
     booking:{
            type:mongoose.Schema.Types.ObjectId,
-        ref:"Booking"
+        ref:"Listing"
     }
 },{timestamps:true})
 
@@ -27,4 +27,4 @@ const userSchema = new mongoose.Schema({
 // module.exports= {user}
 
 const user = mongoose.model("User", userSchema)
-module.exports = { User: user }
+export { user as User };

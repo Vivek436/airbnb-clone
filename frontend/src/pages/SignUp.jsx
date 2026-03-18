@@ -60,37 +60,49 @@
 // }
 
 // export default SignUp
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext } from "react";
+import { showSuccess, showError } from "../utils/showToast";
 import { IoMdEye } from "react-icons/io";
 import { IoEyeOff } from "react-icons/io5";
 import { FaLongArrowAltLeft } from "react-icons/fa";
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { authDataContext } from '../Context/AuthContext';
-import UserContext, { userDataContext } from '../Context/UserContext';
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { authDataContext } from "../Context/AuthContext";
+import UserContext, { userDataContext } from "../Context/UserContext";
 
 const SignUp = () => {
   const [show, setShow] = useState(false);
   const navigate = useNavigate();
-  const { serverUrl } = useContext(authDataContext);  // ✅ fixed here
+  const { serverUrl } = useContext(authDataContext); // ✅ fixed here
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  let {userData , setUserData} = useContext(userDataContext);
+  let { userData, setUserData } = useContext(userDataContext);
+  let {loading ,setLoading} = useContext(authDataContext)
 
   const handleSignUp = async (e) => {
+    setLoading(true)
     e.preventDefault();
     try {
       const result = await axios.post(
-        `${serverUrl}/api/auth/signup`,   // ✅ correct URL
+        `${serverUrl}/api/auth/signup`,
         { name, email, password },
-        { withCredentials: true }
+        { withCredentials: true },
+       
       );
-      setUserData(result.data)
-      navigate("/")
-      console.log(result);
+
+      setUserData(result.data);
+      showSuccess("Account created successfully ");
+      navigate("/");
     } catch (error) {
+       setLoading(false)
       console.log(error);
+
+      if (error.response && error.response.data.message) {
+        showError(error.response.data.message);
+      } else {
+        showError("Something went wrong. Please try again.");
+      }
     }
   };
 
@@ -98,7 +110,7 @@ const SignUp = () => {
     <div className="w-[100vw] h-[100vh] flex items-center justify-center relative">
       <div
         className="w-[50px] h-[50px] bg-[red] cursor-pointer absolute top-[10%] left-[20px] rounded-[50%] flex items-center justify-center"
-        onClick={() => navigate('/')}
+        onClick={() => navigate("/")}
       >
         <FaLongArrowAltLeft className="h-[25px] text-[white] w-[25px]" />
       </div>
@@ -110,7 +122,9 @@ const SignUp = () => {
         <h1 className="text-[30px] text-[black]">Welcome to Airbnb</h1>
 
         <div className="w-[90%] flex flex-col gap-[10px] mt-[30px]">
-          <label htmlFor="name" className="text-[20px]">UserName</label>
+          <label htmlFor="name" className="text-[20px]">
+            UserName
+          </label>
           <input
             type="text"
             id="name"
@@ -122,7 +136,9 @@ const SignUp = () => {
         </div>
 
         <div className="w-[90%] flex flex-col gap-[10px]">
-          <label htmlFor="email" className="text-[20px]">Email</label>
+          <label htmlFor="email" className="text-[20px]">
+            Email
+          </label>
           <input
             type="email"
             id="email"
@@ -134,7 +150,9 @@ const SignUp = () => {
         </div>
 
         <div className="relative w-[90%] flex flex-col gap-[10px]">
-          <label htmlFor="password" className="text-[20px]">Password</label>
+          <label htmlFor="password" className="text-[20px]">
+            Password
+          </label>
           <input
             type={show ? "text" : "password"}
             id="password"
@@ -156,14 +174,15 @@ const SignUp = () => {
           )}
         </div>
 
-        <button className="px-[50px] py-[10px] text-[white] bg-[red] text-[18px] md:px-[100px] rounded-lg mt-[20px]">
-          Sign Up
+        <button className="px-[50px] py-[10px] text-[white] bg-[red] text-[18px] md:px-[100px] rounded-lg mt-[20px]" disabled={loading}>
+          
+          {loading? "Loading...":"SignUp"}
         </button>
         <p className="text-[18px]">
-          Already have an account?{" "}
+          Already have an account
           <span
             className="text-[19px] text-[red] cursor-pointer"
-            onClick={() => navigate('/login')}
+            onClick={() => navigate("/login")}
           >
             Login
           </span>
