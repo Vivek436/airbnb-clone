@@ -1,4 +1,4 @@
-const jwt = require('jsonwebtoken')
+import jwt from 'jsonwebtoken';
 
 const genToken = async (userId)=>{
     try {
@@ -12,4 +12,4 @@ const genToken = async (userId)=>{
 
 }
 
-module.exports = {genToken}
+export { genToken };

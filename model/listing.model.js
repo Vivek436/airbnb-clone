@@ -1,5 +1,4 @@
-const mongoose = require("mongoose")
-const { User } = require("./user.model")
+import mongoose from "mongoose";
 
 const listingSchema = new mongoose.Schema({
     title:{
@@ -49,6 +48,6 @@ const listingSchema = new mongoose.Schema({
     }
 },{timestamps:true})
 
-let Listing = mongoose.model("Listing ",listingSchema)
+let Listing = mongoose.model("Listing ", listingSchema)
 
-module.exports = Listing
+export default Listing;

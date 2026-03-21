@@ -1,6 +1,6 @@
-const { genToken } = require("../config/token")
-const {User} = require('../model/user.model')
-const bcrypt = require('bcryptjs')
+import { genToken } from "../config/token.js";
+import { User } from '../model/user.model.js';
+import bcrypt from 'bcryptjs';
 
 const signUp = async (req,res)=>{
     try{
@@ -12,13 +12,12 @@ const signUp = async (req,res)=>{
         let hashPassword = await bcrypt.hash(password,10)
         let user = await User.create({name,email,password:hashPassword})
         let token = await genToken(user._id)
-        res.cookie("token",token,{
-            httpOnly:true,
-            secure: process.env.NODE_ENVIRONMENT = "production",
-            sameSite :"strict",
-            maxAge: 7 * 24 * 60 * 60 * 1000
-
-        })
+        res.cookie("token", token, {
+  httpOnly: true,
+  secure: true,        // 🔥 always true (production)
+  sameSite: "none",    // 🔥 MUST for Vercel + Render
+  maxAge: 7 * 24 * 60 * 60 * 1000
+});
         return res.status(201).json(user)
 
     }catch(error){
@@ -44,13 +43,12 @@ const login = async (req,res) => {
  
         }
         let token = await genToken(user._id)
-        res.cookie("token",token,{
-            httpOnly:true,
-            secure: process.env.NODE_ENVIRONMENT = "production",
-            sameSite :"strict",
-            maxAge: 7 * 24 * 60 * 60 * 1000
-
-        })
+        res.cookie("token", token, {
+  httpOnly: true,
+  secure: true,        // 🔥 always true (production)
+  sameSite: "none",    // 🔥 MUST for Vercel + Render
+  maxAge: 7 * 24 * 60 * 60 * 1000
+});
         return res.status(200).json(user)
     } catch (error) {
          return res.status(500).json({message:`login error ${error}`})
@@ -68,4 +66,4 @@ const logOut = async (req,res)=>{
 }
 // module.exports = {login}
 
-module.exports = { signUp, login, logOut};
+export { signUp, login, logOut };

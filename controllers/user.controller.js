@@ -1,4 +1,4 @@
-const { User } = require("../model/user.model");
+import { User } from "../model/user.model.js";
 
 const getCurrentUser = async (req, res) => {
   try {
@@ -14,4 +14,4 @@ const getCurrentUser = async (req, res) => {
   }
 };
 
-module.exports = { getCurrentUser };
+export { getCurrentUser };
